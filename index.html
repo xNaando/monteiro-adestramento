@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monteiro Adestramento - Gestão Local</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">🐾</div>
+      <div class="titles">
+        <h1>Monteiro Adestramento</h1>
+        <p>Gestão local de clientes, cães, aulas e pagamentos</p>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-tab="clientes" class="active">Clientes</button>
+      <button data-tab="caes">Cães</button>
+      <button data-tab="aulas">Aulas</button>
+      <button data-tab="pagamentos">Pagamentos</button>
+      <button data-tab="backup">Backup</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <section id="tab-clientes" class="tab-content active">
+      <div class="toolbar">
+        <h2>Clientes</h2>
+        <button id="btnNovoCliente" class="primary">Novo Cliente</button>
+      </div>
+      <div id="clientesLista" class="card-list"></div>
+
+      <dialog id="dlgCliente" class="dialog">
+        <form id="formCliente" method="dialog">
+          <h3 id="dlgClienteTitulo">Novo Cliente</h3>
+          <div class="grid">
+            <label>
+              Nome
+              <input type="text" id="cliNome" required />
+            </label>
+            <label>
+              Telefone
+              <input type="tel" id="cliTelefone" placeholder="(xx) xxxxx-xxxx" />
+            </label>
+            <label class="span-2">
+              Email
+              <input type="email" id="cliEmail" />
+            </label>
+            <label class="span-2">
+              Observações
+              <textarea id="cliObs" rows="3"></textarea>
+            </label>
+          </div>
+          <menu>
+            <button type="reset" id="dlgClienteCancelar">Cancelar</button>
+            <button type="submit" class="primary">Salvar</button>
+          </menu>
+        </form>
+      </dialog>
+    </section>
+
+    <section id="tab-caes" class="tab-content">
+      <div class="toolbar">
+        <h2>Cães</h2>
+        <button id="btnNovoCao" class="primary">Novo Cão</button>
+      </div>
+      <div class="filters">
+        <label>
+          Filtrar por cliente
+          <select id="filtroCaoCliente"></select>
+        </label>
+      </div>
+      <div id="caesLista" class="card-list"></div>
+
+      <dialog id="dlgCao" class="dialog">
+        <form id="formCao" method="dialog">
+          <h3 id="dlgCaoTitulo">Novo Cão</h3>
+          <div class="grid">
+            <label>
+              Nome do cão
+              <input type="text" id="caoNome" required />
+            </label>
+            <label>
+              Raça
+              <input type="text" id="caoRaca" />
+            </label>
+            <label>
+              Idade (anos)
+              <input type="number" id="caoIdade" min="0" step="1" />
+            </label>
+            <label>
+              Cliente
+              <select id="caoClienteId" required></select>
+            </label>
+            <label class="span-2">
+              Observações
+              <textarea id="caoObs" rows="3"></textarea>
+            </label>
+          </div>
+          <menu>
+            <button type="reset" id="dlgCaoCancelar">Cancelar</button>
+            <button type="submit" class="primary">Salvar</button>
+          </menu>
+        </form>
+      </dialog>
+    </section>
+
+    <section id="tab-aulas" class="tab-content">
+      <div class="toolbar">
+        <h2>Aulas</h2>
+        <button id="btnNovaAula" class="primary">Nova Aula</button>
+      </div>
+      <div class="filters">
+        <label>
+          Cliente
+          <select id="filtroAulaCliente"></select>
+        </label>
+        <label>
+          Cão
+          <select id="filtroAulaCao"></select>
+        </label>
+      </div>
+      <div id="aulasLista" class="card-list"></div>
+
+      <dialog id="dlgAula" class="dialog">
+        <form id="formAula" method="dialog">
+          <h3 id="dlgAulaTitulo">Nova Aula</h3>
+          <div class="grid">
+            <label>
+              Data
+              <input type="date" id="aulaData" required />
+            </label>
+            <label>
+              Duração (min)
+              <input type="number" id="aulaDuracao" min="15" step="15" value="60" />
+            </label>
+            <label>
+              Cliente
+              <select id="aulaClienteId" required></select>
+            </label>
+            <label>
+              Cão
+              <select id="aulaCaoId" required></select>
+            </label>
+            <label class="span-2">
+              Conteúdo / Observações
+              <textarea id="aulaObs" rows="3"></textarea>
+            </label>
+          </div>
+          <menu>
+            <button type="reset" id="dlgAulaCancelar">Cancelar</button>
+            <button type="submit" class="primary">Salvar</button>
+          </menu>
+        </form>
+      </dialog>
+    </section>
+
+    <section id="tab-pagamentos" class="tab-content">
+      <div class="toolbar">
+        <h2>Pagamentos</h2>
+        <button id="btnNovoPgto" class="primary">Novo Pagamento</button>
+      </div>
+      <div class="filters">
+        <label>
+          Cliente
+          <select id="filtroPgtoCliente"></select>
+        </label>
+        <label>
+          Status
+          <select id="filtroPgtoStatus">
+            <option value="">Todos</option>
+            <option value="pago">Pago</option>
+            <option value="pendente">Pendente</option>
+            <option value="parcelado">Parcelado</option>
+          </select>
+        </label>
+      </div>
+      <div id="pgtoLista" class="card-list"></div>
+
+      <dialog id="dlgPgto" class="dialog">
+        <form id="formPgto" method="dialog">
+          <h3 id="dlgPgtoTitulo">Novo Pagamento</h3>
+          <div class="grid">
+            <label>
+              Cliente
+              <select id="pgtoClienteId" required></select>
+            </label>
+            <label>
+              Valor (R$)
+              <input type="number" id="pgtoValor" step="0.01" min="0" required />
+            </label>
+            <label>
+              Forma
+              <select id="pgtoForma">
+                <option>Pix</option>
+                <option>Dinheiro</option>
+                <option>Cartão</option>
+                <option>Transferência</option>
+              </select>
+            </label>
+            <label>
+              Parcelado?
+              <select id="pgtoParcelado">
+                <option value="nao">Não</option>
+                <option value="sim">Sim</option>
+              </select>
+            </label>
+            <label>
+              Parcelas
+              <input type="number" id="pgtoParcelas" min="1" value="1" />
+            </label>
+            <label>
+              Data
+              <input type="date" id="pgtoData" required />
+            </label>
+            <label class="span-2">
+              Observações
+              <textarea id="pgtoObs" rows="3"></textarea>
+            </label>
+            <label>
+              Status
+              <select id="pgtoStatus">
+                <option value="pago">Pago</option>
+                <option value="pendente">Pendente</option>
+                <option value="parcelado">Parcelado</option>
+              </select>
+            </label>
+          </div>
+          <menu>
+            <button type="reset" id="dlgPgtoCancelar">Cancelar</button>
+            <button type="submit" class="primary">Salvar</button>
+          </menu>
+        </form>
+      </dialog>
+    </section>
+
+    <section id="tab-backup" class="tab-content">
+      <div class="toolbar">
+        <h2>Backup (Exportar/Importar)</h2>
+      </div>
+      <div class="backup-card">
+        <p>Todos os dados ficam salvos apenas no seu navegador. Use estes botões para exportar tudo para um arquivo ou importar de volta quando quiser.</p>
+        <div class="backup-actions">
+          <button id="btnExportar" class="primary">Exportar Tudo (JSON)</button>
+          <label for="inputImport" class="secondary">Importar Tudo (JSON)</label>
+          <input type="file" id="inputImport" accept="application/json,.json" />
+        </div>
+        <small>Dica: guarde o arquivo exportado em um serviço na nuvem para ter cópia de segurança.</small>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>Local • Sem internet • Seus dados ficam com você</span>
+    <span id="versao"></span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
