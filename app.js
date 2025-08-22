@@ -520,6 +520,15 @@
     // Novos filtros de data
     $('#filtroAulaDe').addEventListener('change', renderAulas);
     $('#filtroAulaAte').addEventListener('change', renderAulas);
+    // Limpar filtros
+    $('#btnResetFiltrosAula').addEventListener('click', () => {
+      $('#filtroAulaCliente').value = '';
+      fillCaesSelect($('#filtroAulaCao'), '', true);
+      $('#filtroAulaCao').value = '';
+      $('#filtroAulaDe').value = '';
+      $('#filtroAulaAte').value = '';
+      renderAulas();
+    });
 
     $('#aulaClienteId').addEventListener('change', () => {
       fillCaesSelect($('#aulaCaoId'), $('#aulaClienteId').value, false);
