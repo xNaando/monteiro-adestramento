@@ -103,6 +103,8 @@
       card.innerHTML = `
         <h4>${cli.nome}</h4>
         <div class="muted">${cli.telefone || ''} ${cli.email ? '• ' + cli.email : ''}</div>
+        ${cli.endereco ? `<div class=\"muted\">Endereço: ${cli.endereco}</div>` : ''}
+        ${cli.social ? `<div class=\"muted\">Rede social: ${cli.social}</div>` : ''}
         <div>
           <span class="badge">Cães: ${caesDoCliente.length}</span>
           <span class="badge">Aulas: ${aulasDoCliente.length}</span>
@@ -321,6 +323,8 @@
     $('#cliNome').value = cli?.nome || '';
     $('#cliTelefone').value = cli?.telefone || '';
     $('#cliEmail').value = cli?.email || '';
+    $('#cliEndereco').value = cli?.endereco || '';
+    $('#cliSocial').value = cli?.social || '';
     $('#cliObs').value = cli?.obs || '';
     dlg.dataset.editing = cli ? cli.id : '';
     dlg.showModal();
@@ -337,6 +341,8 @@
         nome: $('#cliNome').value.trim(),
         telefone: $('#cliTelefone').value.trim(),
         email: $('#cliEmail').value.trim(),
+        endereco: $('#cliEndereco').value.trim(),
+        social: $('#cliSocial').value.trim(),
         obs: $('#cliObs').value.trim(),
         createdAt: new Date().toISOString()
       };

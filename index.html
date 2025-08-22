@@ -36,17 +36,25 @@
         <form id="formCliente" method="dialog">
           <h3 id="dlgClienteTitulo">Novo Cliente</h3>
           <div class="grid">
-            <label>
+            <label class="span-2">
               Nome
               <input type="text" id="cliNome" required />
             </label>
-            <label>
+            <label class="span-2">
               Telefone
               <input type="tel" id="cliTelefone" placeholder="(xx) xxxxx-xxxx" />
             </label>
             <label class="span-2">
               Email
               <input type="email" id="cliEmail" />
+            </label>
+            <label class="span-2">
+              Endereço
+              <input type="text" id="cliEndereco" placeholder="Rua, número, bairro, cidade" />
+            </label>
+            <label class="span-2">
+              Rede social (Instagram, Facebook, site...)
+              <input type="text" id="cliSocial" placeholder="ex.: instagram.com/seuperfil" />
             </label>
             <label class="span-2">
               Observações
@@ -78,19 +86,19 @@
         <form id="formCao" method="dialog">
           <h3 id="dlgCaoTitulo">Novo Cão</h3>
           <div class="grid">
-            <label>
+            <label class="span-2">
               Nome do cão
               <input type="text" id="caoNome" required />
             </label>
-            <label>
+            <label class="span-2">
               Raça
               <input type="text" id="caoRaca" />
             </label>
-            <label>
+            <label class="span-2">
               Idade (anos)
               <input type="number" id="caoIdade" min="0" step="1" />
             </label>
-            <label>
+            <label class="span-2">
               Cliente
               <select id="caoClienteId" required></select>
             </label>
