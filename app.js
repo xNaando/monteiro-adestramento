@@ -100,12 +100,29 @@
   function renderClientes(){
     const wrap = $('#clientesLista');
     wrap.innerHTML = '';
-    if(store.clientes.length === 0){
-      wrap.innerHTML = '<div class="card"><div class="muted">Nenhum cliente cadastrado ainda.</div></div>';
+    // Popular datalist com todos os clientes
+    const dl = $('#clientesDatalist');
+    if(dl){
+      dl.innerHTML = '';
+      store.clientes.slice().sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR')).forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.nome;
+        dl.appendChild(opt);
+      });
+    }
+
+    let lista = store.clientes.slice();
+    const termo = ($('#filtroClienteNome')?.value || '').trim().toLowerCase();
+    if(termo){
+      lista = lista.filter(c => c.nome.toLowerCase().includes(termo));
+    }
+
+    if(lista.length === 0){
+      wrap.innerHTML = '<div class="card"><div class="muted">Nenhum cliente encontrado.</div></div>';
       return;
     }
     const frag = document.createDocumentFragment();
-    store.clientes.slice().sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR')).forEach(cli => {
+    lista.sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR')).forEach(cli => {
       const caesDoCliente = store.caes.filter(c => c.clienteId === cli.id);
       const aulasDoCliente = store.aulas.filter(a => a.clienteId === cli.id);
       const pagosDoCliente = store.pagamentos.filter(p => p.clienteId === cli.id);
@@ -360,6 +377,20 @@
   function bindClientes(){
     $('#btnNovoCliente').addEventListener('click', () => openClienteDialog(null));
     $('#dlgClienteCancelar').addEventListener('click', () => $('#dlgCliente').close());
+    // Filtro por nome (input/datalist)
+    const filtro = $('#filtroClienteNome');
+    if(filtro){
+      filtro.addEventListener('input', renderClientes);
+      filtro.addEventListener('change', renderClientes);
+    }
+    const btnReset = $('#btnResetFiltrosCliente');
+    if(btnReset){
+      btnReset.addEventListener('click', () => {
+        const inp = $('#filtroClienteNome');
+        if(inp) inp.value = '';
+        renderClientes();
+      });
+    }
     $('#formCliente').addEventListener('submit', (e) => {
       e.preventDefault();
       const id = $('#dlgCliente').dataset.editing;
