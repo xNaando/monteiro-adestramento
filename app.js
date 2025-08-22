@@ -421,6 +421,16 @@
 
     $('#filtroCaoCliente').addEventListener('change', renderCaes);
 
+    // Limpar filtros
+    const btnReset = document.querySelector('#btnResetFiltrosCao');
+    if(btnReset){
+      btnReset.addEventListener('click', () => {
+        const sel = document.querySelector('#filtroCaoCliente');
+        if(sel){ sel.value = ''; }
+        renderCaes();
+      });
+    }
+
     // Botão para adicionar raça
     $('#btnAddRaca').addEventListener('click', () => {
       $('#racaNome').value = '';
