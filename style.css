@@ -57,6 +57,17 @@ label{ display:flex; flex-direction: column; gap:6px; font-size: 14px; }
 .backup-card{ background: var(--card); border:1px solid var(--border); border-radius: 12px; padding: 16px; display:flex; flex-direction: column; gap: 12px; }
 .backup-actions{ display:flex; gap: 8px; align-items:center; }
 #inputImport{ display:none; }
+/* Botão Importar Tudo em verde */
+label[for="inputImport"]{
+  display:inline-block;
+  padding:8px 12px;
+  border-radius: 8px;
+  cursor:pointer;
+  background: var(--success);
+  color:#fff;
+  border: none;
+}
+label[for="inputImport"]:hover{ background: #15803d; }
 
 .app-footer{ display:flex; justify-content: space-between; align-items:center; gap: 8px; border-top: 1px solid var(--border); background:#fff; padding: 10px 16px; font-size: 13px; color: var(--muted); }
 
