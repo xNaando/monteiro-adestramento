@@ -211,14 +211,26 @@
   function renderAulas(){
     const filtroCli = $('#filtroAulaCliente');
     const filtroCao = $('#filtroAulaCao');
+    const prevCli = filtroCli.value;
+    const prevCao = filtroCao.value;
+    const filtroDe = $('#filtroAulaDe');
+    const filtroAte = $('#filtroAulaAte');
+
+    // Recarrega opções preservando seleção
     fillClientesSelect(filtroCli, true);
+    if(prevCli) filtroCli.value = prevCli;
     fillCaesSelect(filtroCao, filtroCli.value, true);
+    if(prevCao) filtroCao.value = prevCao;
 
     const wrap = $('#aulasLista');
     wrap.innerHTML = '';
     let lista = store.aulas.slice();
     const cliId = filtroCli.value; if(cliId) lista = lista.filter(a => a.clienteId === cliId);
     const caoId = filtroCao.value; if(caoId) lista = lista.filter(a => a.caoId === caoId);
+    const de = (filtroDe && filtroDe.value) ? filtroDe.value : '';
+    const ate = (filtroAte && filtroAte.value) ? filtroAte.value : '';
+    if(de) lista = lista.filter(a => (a.data||'') >= de);
+    if(ate) lista = lista.filter(a => (a.data||'') <= ate);
 
     if(lista.length === 0){
       wrap.innerHTML = '<div class="card"><div class="muted">Nenhuma aula cadastrada.</div></div>';
@@ -505,6 +517,9 @@
       renderAulas();
     });
     $('#filtroAulaCao').addEventListener('change', renderAulas);
+    // Novos filtros de data
+    $('#filtroAulaDe').addEventListener('change', renderAulas);
+    $('#filtroAulaAte').addEventListener('change', renderAulas);
 
     $('#aulaClienteId').addEventListener('change', () => {
       fillCaesSelect($('#aulaCaoId'), $('#aulaClienteId').value, false);
