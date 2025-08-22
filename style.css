@@ -63,6 +63,9 @@ label{ display:flex; flex-direction: column; gap:6px; font-size: 14px; }
 .tab-content{ display:none; }
 .tab-content.active{ display:block; }
 
+/* Largura mínima maior para o filtro de cliente em Cães */
+#filtroCaoCliente{ min-width: 280px; }
+
 @media (max-width: 640px){
   .grid{ grid-template-columns: 1fr; }
   .span-2{ grid-column: span 1; }
