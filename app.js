@@ -429,6 +429,30 @@
       $('#dlgRaca').close();
     });
 
+    // Excluir raça selecionada
+    $('#btnDelRaca').addEventListener('click', () => {
+      const sel = $('#caoRacaSelect');
+      const id = sel.value;
+      if(!id){ alert('Selecione uma raça para excluir.'); return; }
+      const r = store.racas.find(x => x.id === id);
+      if(!r){ alert('Raça não encontrada.'); return; }
+      if(!confirm(`Excluir a raça "${r.nome}"? Os cães vinculados manterão o nome da raça somente como texto.`)) return;
+      // Atualizar cães vinculados
+      store.caes = store.caes.map(c => {
+        if(c.racaId === id){
+          return { ...c, racaId: '', racaNome: c.racaNome || r.nome };
+        }
+        return c;
+      });
+      // Remover raça
+      store.racas = store.racas.filter(x => x.id !== id);
+      saveStore(store);
+      // Atualizar select e limpeza
+      fillRacasSelect(sel, true);
+      sel.value = '';
+      renderCaes();
+    });
+
     $('#formCao').addEventListener('submit', (e) => {
       e.preventDefault();
       const id = $('#dlgCao').dataset.editing;
