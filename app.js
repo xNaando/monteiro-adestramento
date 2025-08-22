@@ -153,7 +153,10 @@
 
   function renderCaes(){
     const filtroCli = $('#filtroCaoCliente');
+    // Preserva seleção ao recarregar opções
+    const selectedBefore = filtroCli.value;
     fillClientesSelect(filtroCli, true);
+    if(selectedBefore) filtroCli.value = selectedBefore;
 
     const wrap = $('#caesLista');
     wrap.innerHTML = '';
