@@ -296,7 +296,10 @@
   function renderPagamentos(){
     const filtroCli = $('#filtroPgtoCliente');
     const filtroStatus = $('#filtroPgtoStatus');
+    // Preserva seleção ao recarregar opções
+    const prevCli = filtroCli.value;
     fillClientesSelect(filtroCli, true);
+    if(prevCli) filtroCli.value = prevCli;
 
     const wrap = $('#pgtoLista');
     wrap.innerHTML = '';
@@ -621,6 +624,15 @@
     $('#dlgPgtoCancelar').addEventListener('click', () => $('#dlgPgto').close());
     $('#filtroPgtoCliente').addEventListener('change', renderPagamentos);
     $('#filtroPgtoStatus').addEventListener('change', renderPagamentos);
+    // Limpar filtros
+    const btnReset = document.querySelector('#btnResetFiltrosPgto');
+    if(btnReset){
+      btnReset.addEventListener('click', () => {
+        $('#filtroPgtoCliente').value = '';
+        $('#filtroPgtoStatus').value = '';
+        renderPagamentos();
+      });
+    }
 
     $('#formPgto').addEventListener('submit', (e) => {
       e.preventDefault();
