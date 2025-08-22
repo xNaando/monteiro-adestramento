@@ -59,13 +59,15 @@ label{ display:flex; flex-direction: column; gap:6px; font-size: 14px; }
 #inputImport{ display:none; }
 /* Botão Importar Tudo em verde */
 label[for="inputImport"]{
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
   padding:8px 12px;
   border-radius: 8px;
   cursor:pointer;
   background: var(--success);
   color:#fff;
   border: none;
+  line-height: 1;
 }
 label[for="inputImport"]:hover{ background: #15803d; }
 
