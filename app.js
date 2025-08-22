@@ -20,7 +20,8 @@
     clientes: [],
     caes: [],
     aulas: [],
-    pagamentos: []
+    pagamentos: [],
+    racas: []
   });
 
   const loadStore = () => {
@@ -32,7 +33,8 @@
         return init;
       }
       const data = JSON.parse(raw);
-      // Migrações futuras poderiam ir aqui.
+      // Migrações
+      if(!data.racas) data.racas = [];
       return data;
     }catch(e){
       console.error('Erro ao carregar store', e);
@@ -83,6 +85,15 @@
     lista
       .sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'))
       .forEach(c => select.append(new Option(c.nome, c.id)));
+  }
+
+  function fillRacasSelect(select, includeVazio=true){
+    select.innerHTML = '';
+    if(includeVazio) select.append(new Option('— selecione —', ''));
+    store.racas
+      .slice()
+      .sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+      .forEach(r => select.append(new Option(r.nome, r.id)));
   }
 
   // -------------------- Renderizadores --------------------
@@ -157,11 +168,12 @@
     const frag = document.createDocumentFragment();
     lista.sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR')).forEach(cao => {
       const cliente = store.clientes.find(c => c.id === cao.clienteId);
+      const racaNome = (cao.racaNome) || (store.racas.find(r => r.id === cao.racaId)?.nome) || (cao.raca) || 'Raça não informada';
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
         <h4>${cao.nome}</h4>
-        <div class="muted">${cao.raca || 'Raça não informada'} • ${cao.idade||'-'} anos</div>
+        <div class="muted">${racaNome} • ${cao.idade||'-'} anos</div>
         <div class="muted">Cliente: ${cliente ? cliente.nome : '—'}</div>
         ${cao.obs ? `<div class="muted">${cao.obs}</div>` : ''}
         <div class="actions">
@@ -363,10 +375,26 @@
     const dlg = $('#dlgCao');
     $('#dlgCaoTitulo').textContent = cao ? 'Editar Cão' : 'Novo Cão';
     $('#caoNome').value = cao?.nome || '';
-    $('#caoRaca').value = cao?.raca || '';
     $('#caoIdade').value = (cao?.idade ?? '').toString();
     fillClientesSelect($('#caoClienteId'), false);
     $('#caoClienteId').value = cao?.clienteId || '';
+    // Raças
+    const racaSelect = $('#caoRacaSelect');
+    fillRacasSelect(racaSelect, true);
+    // Compatibilidade com dados antigos: selecionar por racaId ou raca/racaNome
+    let selected = cao?.racaId || '';
+    if(!selected && (cao?.racaNome || cao?.raca)){
+      const nomeRef = (cao.racaNome || cao.raca).trim().toLowerCase();
+      const found = store.racas.find(r => r.nome.trim().toLowerCase() === nomeRef);
+      if(found) selected = found.id;
+      else{
+        // adiciona opção temporária para exibir
+        const opt = new Option(cao.racaNome || cao.raca, '');
+        racaSelect.add(opt, 1);
+        racaSelect.value = '';
+      }
+    }
+    if(selected) racaSelect.value = selected;
     $('#caoObs').value = cao?.obs || '';
     dlg.dataset.editing = cao ? cao.id : '';
     dlg.showModal();
@@ -378,13 +406,38 @@
 
     $('#filtroCaoCliente').addEventListener('change', renderCaes);
 
+    // Botão para adicionar raça
+    $('#btnAddRaca').addEventListener('click', () => {
+      $('#racaNome').value = '';
+      $('#dlgRaca').showModal();
+    });
+    $('#dlgRacaCancelar').addEventListener('click', () => $('#dlgRaca').close());
+    $('#formRaca').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nome = $('#racaNome').value.trim();
+      if(!nome){ alert('Informe o nome da raça.'); return; }
+      // evitar duplicado por nome (case-insensitive)
+      const exists = store.racas.find(r => r.nome.trim().toLowerCase() === nome.toLowerCase());
+      const id = exists ? exists.id : uid();
+      if(!exists){
+        store.racas.push({ id, nome, createdAt: new Date().toISOString() });
+        saveStore(store);
+      }
+      // atualizar select e selecionar a nova raça
+      fillRacasSelect($('#caoRacaSelect'), true);
+      $('#caoRacaSelect').value = id;
+      $('#dlgRaca').close();
+    });
+
     $('#formCao').addEventListener('submit', (e) => {
       e.preventDefault();
       const id = $('#dlgCao').dataset.editing;
+      const rSel = $('#caoRacaSelect');
       const data = {
         id: id || uid(),
         nome: $('#caoNome').value.trim(),
-        raca: $('#caoRaca').value.trim(),
+        racaId: rSel.value || '',
+        racaNome: rSel.options[rSel.selectedIndex]?.text || '',
         idade: Number($('#caoIdade').value || 0),
         clienteId: $('#caoClienteId').value,
         obs: $('#caoObs').value.trim(),

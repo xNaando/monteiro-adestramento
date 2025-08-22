@@ -92,7 +92,10 @@
             </label>
             <label class="span-2">
               Raça
-              <input type="text" id="caoRaca" />
+              <div style="display:flex; gap:8px; align-items:center;">
+                <select id="caoRacaSelect"></select>
+                <button type="button" id="btnAddRaca" class="secondary" title="Adicionar raça">+</button>
+              </div>
             </label>
             <label class="span-2">
               Idade (anos)
@@ -110,6 +113,22 @@
           <menu>
             <button type="reset" id="dlgCaoCancelar">Cancelar</button>
             <button type="submit" class="primary">Salvar</button>
+          </menu>
+        </form>
+      </dialog>
+
+      <dialog id="dlgRaca" class="dialog">
+        <form id="formRaca" method="dialog">
+          <h3>Nova Raça</h3>
+          <div class="grid">
+            <label class="span-2">
+              Nome da raça
+              <input type="text" id="racaNome" required />
+            </label>
+          </div>
+          <menu>
+            <button type="reset" id="dlgRacaCancelar">Cancelar</button>
+            <button type="submit" class="primary">Adicionar</button>
           </menu>
         </form>
       </dialog>
